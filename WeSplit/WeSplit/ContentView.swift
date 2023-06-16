@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var checkAmount: Double = 0
     @State private var numberOfPeoples: Int = 2
     @State private var tipPercentage: Double = 0.2
+    @FocusState private var isFoucused: Bool
     
     let percentages = [0, 0.10, 0.15, 0.20, 0.25]
     
@@ -22,40 +23,52 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                Form {
-                    Section{
-                        TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                            .keyboardType(.decimalPad)
-                    } header: {
-                        Text("Amount:")
-                    }
-                    
-                    Section {
-                        TextField("Numbers of people", value: $numberOfPeoples, format: .number)
-                            .keyboardType(.numberPad)
-                    } header: {
-                        Text("Numbers of peoples:")
-                    }
-                    
-                    Section {
-                        Picker("How much tip do you want to leave?", selection: $tipPercentage) {
-                            ForEach(percentages, id: \.self) {
-                                Text($0, format: .percent)
-                            }
+            Form {
+                Section{
+                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .keyboardType(.decimalPad)
+                        .focused($isFoucused)
+                } header: {
+                    Text("Amount:")
+                }
+                
+                Section {
+                    TextField("Numbers of people", value: $numberOfPeoples, format: .number)
+                        .keyboardType(.numberPad)
+                        .focused($isFoucused)
+                } header: {
+                    Text("Numbers of peoples:")
+                }
+                
+                Section {
+                    Picker("How much tip do you want to leave?", selection: $tipPercentage) {
+                        ForEach(percentages, id: \.self) {
+                            Text($0, format: .percent)
                         }
-                    } header: {
-                        Text("Tip:")
                     }
-                } .navigationTitle("WeSplit")
+                } header: {
+                    Text("Tip:")
+                }
                 Text("Total for people is: \(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
+                    .listRowBackground(Color(CGColor(red: 240, green: 240, blue: 246, alpha: 0)))
                     .bold()
                     .foregroundColor(.gray)
+                    .frame(width: 300)
             }
             .navigationTitle("WeSplit")
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    
+                    Button("Done") {
+                        isFoucused = false
+                    }
+                }
+            }
         }
     }
 }
+
 
 
 struct ContentView_Previews: PreviewProvider {
