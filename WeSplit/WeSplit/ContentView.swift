@@ -52,7 +52,7 @@ struct ContentView: View {
                 Text("Total for people is: \(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
                     .listRowBackground(Color(CGColor(red: 240, green: 240, blue: 246, alpha: 0)))
                     .bold()
-                    .foregroundColor(.gray)
+                    .foregroundColor(tipPercentage == 0 ? .red : .gray)
                     .frame(width: 300)
             }
             .navigationTitle("WeSplit")
